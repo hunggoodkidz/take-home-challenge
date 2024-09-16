@@ -1,0 +1,47 @@
+// Define the datasource (PostgreSQL) and Prisma generator
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")  // PostgreSQL connection string
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Define the models (tables in PostgreSQL)
+
+model Node {
+  id        Int      @id @default(autoincrement())  // Primary key
+  name      String                                  // Node name (e.g., device name)
+  type      String                                  // Type of the node (e.g., sensor, data source)
+  position  Json                                    // JSON to store node position in the canvas
+  links     Link[]   @relation("SourceLinks")        // Links where the node is the source
+  createdAt DateTime @default(now())                 // Timestamp for when the node was created
+}
+
+model Link {
+  id        Int      @id @default(autoincrement())   // Primary key
+  sourceId  Int                                      // Foreign key to Node (source node)
+  targetId  Int                                      // Foreign key to Node (target node)
+  source    Node     @relation("SourceLinks", fields: [sourceId], references: [id])
+  target    Node     @relation("TargetLinks", fields: [targetId], references: [id])
+  createdAt DateTime @default(now())                 // Timestamp for when the link was created
+}
+
+// Table to store real-time device data
+model Data {
+  id        Int      @id @default(autoincrement())   // Primary key
+  nodeId    Int                                      // Foreign key to Node (data source)
+  value     Float                                    // The actual data value (e.g., sensor reading)
+  timestamp DateTime @default(now())                 // Timestamp for when the data was recorded
+  node      Node     @relation(fields: [nodeId], references: [id])  // Relationship with Node
+}
+
+// Table to track notifications for device health (e.g., device down)
+model Notification {
+  id        Int      @id @default(autoincrement())   // Primary key
+  nodeId    Int                                      // Foreign key to Node (device)
+  message   String                                   // Message for the notification
+  createdAt DateTime @default(now())                 // Timestamp for when the notification was created
+  node      Node     @relation(fields: [nodeId], references: [id])  // Relationship with Node
+}

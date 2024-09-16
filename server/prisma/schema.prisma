@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Device {
+  id        Int      @id @default(autoincrement())  // Primary key
+  name      String   @unique                      // Unique device name
+  status    Boolean  @default(true)                // Device status (active or not)
+  createdAt DateTime @default(now())               // Timestamp for creation
+  updatedAt DateTime @updatedAt                    // Timestamp for updates
+  dataPoints DataPoint[]                           // Data points associated with the device
+}
+
+model Pipeline {
+  id        Int      @id @default(autoincrement())  // Primary key
+  name      String   @unique                      // Unique pipeline name
+  createdAt DateTime @default(now())               // Timestamp for creation
+  updatedAt DateTime @updatedAt                    // Timestamp for updates
+  nodes     Node[]   // Nodes associated with the pipeline
+}
+
+model Node {
+  id         Int      @id @default(autoincrement()) // Primary key
+  name       String   @unique                     // Unique node name
+  type       String                                 // Type of the node (e.g., sensor, data source)
+  position   Json                                   // JSON to store node position in the canvas
+  pipelineId Int                                     // Foreign key to Pipeline
+  pipeline   Pipeline @relation(fields: [pipelineId], references: [id])
+  createdAt  DateTime @default(now())              // Timestamp for creation
+  updatedAt  DateTime @updatedAt                   // Timestamp for updates
+  links      Link[]   @relation("SourceLinks")     // Links where the node is the source
+  dataPoints DataPoint[]                           // Data points associated with the node
+  notifications Notification[]                     // Notifications for node health
+}
+
+model Link {
+  id          Int      @id @default(autoincrement()) // Primary key
+  sourceNode  Node     @relation("SourceLinks", fields: [sourceNodeId], references: [id])
+  sourceNodeId Int
+  targetNode  Node     @relation("TargetLinks", fields: [targetNodeId], references: [id])
+  targetNodeId Int
+  createdAt   DateTime @default(now())             // Timestamp for creation
+  updatedAt   DateTime @updatedAt                  // Timestamp for updates
+}
+
+model DataPoint {
+  id        Int      @id @default(autoincrement())  // Primary key
+  value     Float                                    // Data value
+  timestamp DateTime @default(now())                // Timestamp for data record
+  nodeId    Int                                      // Foreign key to Node
+  node      Node     @relation(fields: [nodeId], references: [id])
+  createdAt DateTime @default(now())                // Timestamp for creation
+  updatedAt DateTime @updatedAt                    // Timestamp for updates
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())  // Primary key
+  nodeId    Int                                      // Foreign key to Node
+  message   String                                   // Notification message
+  createdAt DateTime @default(now())                // Timestamp for notification creation
+  node      Node     @relation(fields: [nodeId], references: [id])
+}

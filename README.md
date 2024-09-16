@@ -1,2 +1,3 @@
 # take-home-challenge
-Doing full-stack assignment
+Doing full-stack assignment:
+
