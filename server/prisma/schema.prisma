@@ -24,9 +24,22 @@ model Device {
   dataPoints DataPoint[]                           // Data points associated with the device
 }
 
+model DataPoint {
+  id        Int      @id @default(autoincrement())  // Primary key
+  value     Float                                    // Data value
+  timestamp DateTime @default(now())                // Timestamp for data record
+  nodeId    Int                                      // Foreign key to Node
+  node      Node     @relation(fields: [nodeId], references: [id])
+  deviceId  Int                                      // Foreign key to Device
+  device    Device   @relation(fields: [deviceId], references: [id]) // Add this relation
+  createdAt DateTime @default(now())                // Timestamp for creation
+  updatedAt DateTime @updatedAt                    // Timestamp for updates
+}
+
 model Pipeline {
   id        Int      @id @default(autoincrement())  // Primary key
   name      String   @unique                      // Unique pipeline name
+  description String
   createdAt DateTime @default(now())               // Timestamp for creation
   updatedAt DateTime @updatedAt                    // Timestamp for updates
   nodes     Node[]   // Nodes associated with the pipeline
@@ -42,6 +55,7 @@ model Node {
   createdAt  DateTime @default(now())              // Timestamp for creation
   updatedAt  DateTime @updatedAt                   // Timestamp for updates
   links      Link[]   @relation("SourceLinks")     // Links where the node is the source
+  targetLinks Link[]  @relation("TargetLinks")     // Add this relation for target node
   dataPoints DataPoint[]                           // Data points associated with the node
   notifications Notification[]                     // Notifications for node health
 }
@@ -56,15 +70,6 @@ model Link {
   updatedAt   DateTime @updatedAt                  // Timestamp for updates
 }
 
-model DataPoint {
-  id        Int      @id @default(autoincrement())  // Primary key
-  value     Float                                    // Data value
-  timestamp DateTime @default(now())                // Timestamp for data record
-  nodeId    Int                                      // Foreign key to Node
-  node      Node     @relation(fields: [nodeId], references: [id])
-  createdAt DateTime @default(now())                // Timestamp for creation
-  updatedAt DateTime @updatedAt                    // Timestamp for updates
-}
 
 model Notification {
   id        Int      @id @default(autoincrement())  // Primary key
