@@ -10,10 +10,10 @@ const Sidebar: React.FC = () => {
           <Link to="/" className="block p-2 hover:bg-gray-300 rounded">Dashboard</Link>
         </li>
         <li>
-          <Link to="/pipeline-builder" className="block p-2 hover:bg-gray-300 rounded">Pipeline Builder</Link>
+          <Link to="/pipeline" className="block p-2 hover:bg-gray-300 rounded">Pipeline Builder</Link>
         </li>
         <li>
-          <Link to="/device-status" className="block p-2 hover:bg-gray-300 rounded">Device Status</Link>
+          <Link to="/devices" className="block p-2 hover:bg-gray-300 rounded">Device Status</Link>
         </li>
         <li>
           <Link to="/notifications" className="block p-2 hover:bg-gray-300 rounded">Notifications</Link>
