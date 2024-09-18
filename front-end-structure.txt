@@ -1,0 +1,41 @@
+client/
+│
+├── public/               # Static files like favicon, index.html
+│   ├── favicon.ico       # Favicon for the browser tab
+│   └── index.html        # Main HTML file where the React app gets injected
+│
+├── src/                  # Source files
+│   ├── assets/           # Static assets like images, fonts
+│   │   └── logo.png      # Example image (project logo, etc.)
+│   ├── components/       # Reusable UI components
+│   │   ├── Navbar.tsx    # Top navigation bar
+│   │   ├── Sidebar.tsx   # Sidebar for navigation
+│   │   ├── NotificationToast.tsx   # Notification component (using React Toastify)
+│   │   └── Chart.tsx     # Chart component (using Chart.js for time-series data)
+│   ├── pages/            # Pages (for different views)
+│   │   ├── Dashboard.tsx     # Dashboard page with time-series data visualizations
+│   │   ├── PipelineBuilder.tsx  # Page for building data pipelines
+│   │   ├── DeviceStatus.tsx     # Device status page (real-time updates)
+│   │   └── Notifications.tsx    # Page for managing notifications
+│   ├── hooks/            # Custom hooks
+│   │   └── useSocket.ts  # Custom hook for managing socket.io connections
+│   ├── layouts/          # Layout components (for consistent page structure)
+│   │   └── MainLayout.tsx # Main layout with Sidebar and Navbar
+│   ├── redux/            # Redux store, slices, actions
+│   │   ├── store.ts      # Redux store configuration
+│   │   ├── deviceSlice.ts  # Redux slice for device state
+│   │   ├── pipelineSlice.ts # Redux slice for pipeline state
+│   │   └── notificationSlice.ts # Redux slice for notification state
+│   ├── services/         # API calls and socket initialization
+│   │   ├── api.ts        # Axios API setup for HTTP requests
+│   │   └── socket.ts     # Socket.io client setup for real-time updates
+│   ├── styles/           # Global and component-specific styles
+│   │   └── global.css    # Global styles (Tailwind CSS can be imported here)
+│   ├── App.tsx           # Root component where routing is defined
+│   ├── main.tsx          # Main entry point for the React app (Vite entry point)
+│   └── router.tsx        # Routing configuration using React Router
+│
+├── tailwind.config.js    # TailwindCSS configuration
+├── tsconfig.json         # TypeScript configuration
+├── vite.config.ts        # Vite configuration (for bundling and dev server)
+└── package.json          # Project metadata, dependencies, and scripts
