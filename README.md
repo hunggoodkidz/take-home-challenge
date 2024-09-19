@@ -5,5 +5,5 @@ Doing full-stack assignment:
 
 Back-end: NodeJS with Express, Typescript, Prisma ORM, Swagger (Api Documentation)
 
-Front-end: React, Typescript, React-Flow 
+Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO, Redux
 
