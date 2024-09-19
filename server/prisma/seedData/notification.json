@@ -1,0 +1,15 @@
+[
+    {
+      "id": 1,
+      "nodeId": 1,
+      "message": "Sensor node is down",
+      "createdAt": "2024-01-01T12:00:00Z"
+    },
+    {
+      "id": 2,
+      "nodeId": 2,
+      "message": "Data source node is online",
+      "createdAt": "2024-01-03T12:00:00Z"
+    }
+  ]
+  

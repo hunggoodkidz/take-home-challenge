@@ -1,28 +1,37 @@
-import Chart from '../components/Chart';
+import React, { useEffect, useState } from 'react';
+import TimeSeriesChart from '../components/Chart';
+import { getDataPoints } from '../services/dataPointService';
 
-const sampleData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-  datasets: [
-    {
-      label: 'Data Source 1',
-      data: [10, 20, 30, 40, 50, 60],
-      borderColor: 'rgba(75, 192, 192, 1)',
-      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-    },
-    {
-      label: 'Data Source 2',
-      data: [15, 25, 35, 45, 55, 65],
-      borderColor: 'rgba(153, 102, 255, 1)',
-      backgroundColor: 'rgba(153, 102, 255, 0.2)',
-    },
-  ],
-};
+interface DataPoint {
+  value: number;
+  timestamp: string;
+}
 
-const Dashboard = () => {
+const Dashboard: React.FC = () => {
+  const [deviceData, setDeviceData] = useState<{ [deviceName: string]: DataPoint[] }>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getDataPoints();
+        console.log(data); // Verify that data is in the expected format
+        setDeviceData(data);  // Update state with fetched data points
+      } catch (error) {
+        console.error('Error fetching data points:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div>
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <Chart data={sampleData} title="Time-Series Data Visualization" />
+      <h2>Time-Series Dashboard</h2>
+      <div>
+        {Object.keys(deviceData).map((deviceName) => (
+          <TimeSeriesChart key={deviceName} data={deviceData[deviceName] || []} deviceName={deviceName} />
+        ))}
+      </div>
     </div>
   );
 };

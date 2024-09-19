@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "value": 23.5,
+    "timestamp": "2024-01-01T12:00:00Z",
+    "nodeId": 1,
+    "deviceId": 1,
+    "createdAt": "2024-01-01T12:00:00Z",
+    "updatedAt": "2024-01-02T12:00:00Z"
+  },
+  {
+    "id": 2,
+    "value": 25.0,
+    "timestamp": "2024-01-03T12:00:00Z",
+    "nodeId": 2,
+    "deviceId": 2,
+    "createdAt": "2024-01-03T12:00:00Z",
+    "updatedAt": "2024-01-04T12:00:00Z"
+  }
+]

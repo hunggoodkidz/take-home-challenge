@@ -7,8 +7,8 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-xl font-bold">Dashboard</Link>
         <div>
-          <Link to="/pipeline-builder" className="mx-4 hover:underline">Pipeline Builder</Link>
-          <Link to="/device-status" className="mx-4 hover:underline">Device Status</Link>
+          <Link to="/pipeline" className="mx-4 hover:underline">Pipeline Builder</Link>
+          <Link to="/device" className="mx-4 hover:underline">Device Status</Link>
           <Link to="/notifications" className="mx-4 hover:underline">Notifications</Link>
         </div>
       </div>

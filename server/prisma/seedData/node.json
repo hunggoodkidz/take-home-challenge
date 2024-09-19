@@ -1,0 +1,21 @@
+[
+    {
+      "id": 1,
+      "name": "Node 1",
+      "type": "sensor",
+      "position": { "x": 100, "y": 200 },
+      "pipelineId": 1,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-02T00:00:00Z"
+    },
+    {
+      "id": 2,
+      "name": "Node 2",
+      "type": "data source",
+      "position": { "x": 200, "y": 300 },
+      "pipelineId": 2,
+      "createdAt": "2024-01-03T00:00:00Z",
+      "updatedAt": "2024-01-04T00:00:00Z"
+    }
+  ]
+  

@@ -1,15 +1,13 @@
 {
   "compilerOptions": {
-    "target": "es2020",                      // Use latest ECMAScript features.
-    "module": "commonjs",                    // CommonJS module system.
-    "rootDir": "./src",                      // Root directory for your TypeScript files.
-    "outDir": "./dist",                      // Output directory for compiled JavaScript.
-    "strict": true,                          // Enable strict type-checking options.
-    "moduleResolution": "node",              // Resolve modules like Node.js.
-    "esModuleInterop": true,                 // Enable interop between CommonJS and ESModules.
-    "skipLibCheck": true,                    // Skip type checking of declaration files.
-    "forceConsistentCasingInFileNames": true // Enforce consistent casing in imports.
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+    "target": "es2020",                      // Use modern JavaScript features
+    "module": "commonjs",                    // Node.js module system
+    "moduleResolution": "node",              // Resolve Node.js modules
+    "outDir": "./dist",                      // Output for compiled JavaScript
+    "esModuleInterop": true,                 // Interop between CommonJS and ESModules
+    "forceConsistentCasingInFileNames": true, // Enforce consistent file name casing
+    "resolveJsonModule": true,
+    "strict": true,                          // Strict type-checking
+    "skipLibCheck": true                    // Skip checking of declaration files (can be removed for strict checks)
+  }
 }
