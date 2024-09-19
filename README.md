@@ -7,6 +7,34 @@ Back-end: NodeJS with Express, Typescript, Prisma ORM, Swagger (Api Documentatio
 
 Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO, Redux
 
+## Requirements
+
+<p>
+<img src="images/usecase_diagram.png"/> 
+</p>
+
+
+### 1. Manage Data Sources
+- **Description**: Allows users to add, remove, and modify data sources for data pipelines.
+- **Related Use Cases**: Includes `Build Data Pipelines Canvas`.
+
+### 2. Build Data Pipelines Canvas
+- **Description**: Provides a drag-and-drop interface to design data pipelines.
+- **Related Use Cases**: 
+  - Extends: `Add Node`, `Drag Node`, `Link Nodes`.
+
+### 3. Monitor Device Status
+- **Description**: Enables users to monitor the operational status of connected devices.
+- **Related Use Cases**: Includes `Receive Notification`.
+
+### 4. Receive Notification
+- **Description**: Sends notifications to users when specific events (e.g., device failure) occur.
+
+### 5. Visualize a Time-Series Chart
+- **Description**: Allows users to visualize data trends over time using time-series charts.
+
+
+
 ## Key Features
 
 - **Device Management**: Create, update, and track the status of devices.
@@ -14,6 +42,12 @@ Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO
 - **Graph-based Node Management**: Visualize nodes (sensors, data processors, etc.) and edges (data flows) using a canvas-based diagram system.
 - **Real-time Notifications**: Receive alerts and notifications for device and node statuses in real time.
 - **Data Visualization**: View time-series data on the dashboard using graphs and charts.
+
+## Diagram 
+
+<p>
+<img src="images/data_modelling.png"/> 
+</p>
 
 ## API Endpoints
 
