@@ -3,7 +3,7 @@ Doing full-stack assignment:
 
 ## Techstack
 
-Back-end: NodeJS with Express, Typescript, Prisma ORM, Swagger (Api Documentation)
+Back-end: NodeJS with Express, Typescript, PostgreSQL, Prisma ORM, Swagger (Api Documentation)
 
 Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO, Redux
 
