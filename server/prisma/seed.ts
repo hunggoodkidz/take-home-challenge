@@ -26,11 +26,12 @@ async function main() {
   const dataDirectory = path.join(__dirname, "seedData");
 
   const orderedFileNames = [
+
     "node.json",
+    "device.json",
     "dataPoint.json",
     "notification.json",
-    "link.json",
-    "device.json"
+    "link.json"
   ];
 
   await deleteAllData(orderedFileNames);

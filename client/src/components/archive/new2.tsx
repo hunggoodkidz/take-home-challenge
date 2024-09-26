@@ -16,8 +16,8 @@ import {
   type OnConnect,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { getNodes, createNode, updateNode, deleteNode } from '../services/nodeService';
-import { getLinks, createLink, deleteLink } from '../services/linkService';
+import { getNodes, createNode, updateNode, deleteNode } from '../../services/nodeService';
+import { getLinks, createLink, deleteLink } from '../../services/linkService';
 
 const PipelineFlow: React.FC = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -112,42 +112,26 @@ const PipelineFlow: React.FC = () => {
   // Function to add a new node
   const addNode = async () => {
     try {
-      // Generate a base node name
-      const baseName = `Node ${nodes.length + 1}`;
-  
-      // Check if a node with the same name already exists
-      const existingNode = nodes.find((node) => node.data.label === baseName);
-  
-      // If the base name already exists, generate a new unique name
-      let uniqueName = baseName;
-      if (existingNode) {
-        // Append a unique suffix to the name (e.g., timestamp or a unique number)
-        const timestamp = new Date().getTime(); // You can also use a UUID or other unique identifiers
-        uniqueName = `${baseName}-${timestamp}`;
-      }
-  
-      // Create the new node with the unique name
       const newNode = {
-        name: uniqueName,                // Use the unique node name
-        type: nodeType,                  // Use selected node type
+        name: `Node ${nodes.length + 1}`, // Dynamically generate the node name
+        type: nodeType,                   // Use selected node type
         position: { x: Math.random() * 400, y: Math.random() * 400 }, // Random position
-        pipelineId: 1,                   // Assuming pipeline ID 1 for now (adjust as needed)
+        pipelineId: 1,                    // Assuming pipeline ID 1 for now (adjust as needed)
       };
-  
+
       // Pass the entire nodeData object to the createNode function
       const savedNode = await createNode(newNode);
-  
+
       // Add the newly created node to the local state
       setNodes((nds) => [
         ...nds,
         { id: savedNode.id.toString(), data: { label: savedNode.name }, position: savedNode.position, type: savedNode.type }
       ]);
-  
+
     } catch (error) {
       console.error('Error creating node:', error);
     }
   };
-  
 
   // Handle node click to select node for editing or deleting
   const onNodeClick = (_: React.MouseEvent, node: Node) => {

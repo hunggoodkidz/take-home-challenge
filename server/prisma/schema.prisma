@@ -49,9 +49,9 @@ model Node {
   id         Int      @id @default(autoincrement()) // Primary key
   name       String   @unique                     // Unique node name
   type       String                                 // Type of the node (e.g., sensor, data source)
-  position   Json                                   // JSON to store node position in the canvas
+  position   Json                                   // JSON to store node position (x, y coordinates)
   pipelineId Int                                     // Foreign key to Pipeline
-  pipeline   Pipeline @relation(fields: [pipelineId], references: [id])
+  pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade) // Cascade delete
   createdAt  DateTime @default(now())              // Timestamp for creation
   updatedAt  DateTime @updatedAt                   // Timestamp for updates
   links      Link[]   @relation("SourceLinks")     // Links where the node is the source
