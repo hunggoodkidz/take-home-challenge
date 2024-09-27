@@ -1,7 +1,14 @@
 import { Server } from 'socket.io';
-import { getLatestDataPoints } from '../services/dataPointService'; // Ensure this function exists and is correctly imported
+import prisma from '../db/prisma'; // Assuming you're using Prisma ORM
 
-// Function to initialize Socket.io
+// Function to generate random data values for simulation purposes
+const generateRandomDataPoint = (nodeId: number, deviceId: number) => ({
+  value: Math.random() * 100,  // Random value between 0-100
+  timestamp: new Date(),       // Current timestamp
+  nodeId,
+  deviceId,
+});
+
 export const initializeSocket = (httpServer: any) => {
   const io = new Server(httpServer, {
     cors: {
@@ -10,27 +17,47 @@ export const initializeSocket = (httpServer: any) => {
     },
   });
 
-  // Simulate real-time data or fetch from database
+  // Simulate data every 3 seconds
   setInterval(async () => {
-    const latestDataPoints = await getLatestDataPoints(); // Fetch the latest data from the database
+    try {
+      // Fetch all nodes and their associated pipelines and devices through DataPoints
+      const nodes = await prisma.node.findMany({
+        include: {
+          dataPoints: true, // Include associated DataPoints to link the devices
+        },
+      });
 
-    // Emit updated data to all connected clients
-    io.emit('device-data', latestDataPoints);
-  }, 3000); // Update every 3 seconds
+      // For each node, generate random data points by getting the deviceId from the associated DataPoints
+      const newDataPoints = nodes.map((node) => {
+        // Assuming each node is linked to a deviceId via dataPoints, otherwise assign manually
+        const deviceId = node.dataPoints[0]?.deviceId || 1; // Replace 1 with default device or fix your relations
+        return generateRandomDataPoint(node.id, deviceId);
+      });
 
-  // Handle Socket.io connections
-  io.on('connection', async (socket) => {
+      // Store the generated data points in the database (using Prisma)
+      await Promise.all(newDataPoints.map((dataPoint) => prisma.dataPoint.create({
+        data: dataPoint,
+      })));
+
+      // Emit the new data points to all connected clients
+      io.emit('device-data', newDataPoints);
+
+    } catch (error) {
+      console.error('Error generating or storing data points:', error);
+    }
+  }, 100000); // Simulate every 3 seconds
+
+  // Handle client connections
+  io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
-    // Emit the latest data to the newly connected client
-    const latestDataPoints = await getLatestDataPoints();
-    socket.emit('device-data', latestDataPoints);
+    // Send the latest data to the new connection
+    prisma.dataPoint.findMany().then((latestDataPoints) => {
+      socket.emit('device-data', latestDataPoints);
+    });
 
-    // Handle client disconnection
     socket.on('disconnect', () => {
       console.log('A user disconnected:', socket.id);
     });
   });
-
-  return io;
 };
