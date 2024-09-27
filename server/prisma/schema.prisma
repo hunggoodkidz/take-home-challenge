@@ -21,6 +21,7 @@ model Device {
   status    Boolean  @default(true)                // Device status (active or not)
   createdAt DateTime @default(now())               // Timestamp for creation
   updatedAt DateTime @updatedAt                    // Timestamp for updates
+  pipelines Pipeline[]                             // A device can be associated with multiple pipelines
   dataPoints DataPoint[]                           // Data points associated with the device
 }
 
@@ -42,20 +43,22 @@ model Pipeline {
   description String
   createdAt DateTime @default(now())               // Timestamp for creation
   updatedAt DateTime @updatedAt                    // Timestamp for updates
-  nodes     Node[]   // Nodes associated with the pipeline
+  deviceId  Int                                    // Make required again
+  device    Device   @relation(fields: [deviceId], references: [id], onDelete: Cascade) 
+  nodes     Node[]                                 // Nodes associated with the pipeline
 }
 
 model Node {
   id         Int      @id @default(autoincrement()) // Primary key
   name       String   @unique                     // Unique node name
-  type       String                                 // Type of the node (e.g., sensor, data source)
-  position   Json                                   // JSON to store node position (x, y coordinates)
-  pipelineId Int                                     // Foreign key to Pipeline
+  type       String                               // Type of the node (e.g., sensor, data source)
+  position   Json                                 // JSON to store node position (x, y coordinates)
+  pipelineId Int                                  // Foreign key to Pipeline
   pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade) // Cascade delete
   createdAt  DateTime @default(now())              // Timestamp for creation
   updatedAt  DateTime @updatedAt                   // Timestamp for updates
   links      Link[]   @relation("SourceLinks")     // Links where the node is the source
-  targetLinks Link[]  @relation("TargetLinks")     // Add this relation for target node
+  targetLinks Link[]  @relation("TargetLinks")     // Links where the node is the target
   dataPoints DataPoint[]                           // Data points associated with the node
   notifications Notification[]                     // Notifications for node health
 }
@@ -69,7 +72,6 @@ model Link {
   createdAt   DateTime @default(now())             // Timestamp for creation
   updatedAt   DateTime @updatedAt                  // Timestamp for updates
 }
-
 
 model Notification {
   id        Int      @id @default(autoincrement())  // Primary key

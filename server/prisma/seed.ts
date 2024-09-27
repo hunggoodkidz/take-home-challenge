@@ -26,9 +26,9 @@ async function main() {
   const dataDirectory = path.join(__dirname, "seedData");
 
   const orderedFileNames = [
-
-    "node.json",
     "device.json",
+    "pipeline.json",
+    "node.json",
     "dataPoint.json",
     "notification.json",
     "link.json"

@@ -1,17 +1,14 @@
 [
-    {
-      "id": 1,
-      "name": "Pipeline 1",
-      "description": "This is pipeline 1",
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-02T00:00:00Z"
-    },
-    {
-      "id": 2,
-      "name": "Pipeline 2",
-      "description": "This is pipeline 2",
-      "createdAt": "2024-01-03T00:00:00Z",
-      "updatedAt": "2024-01-04T00:00:00Z"
-    }
-  ]
-  
+  {
+    "id" : 1,
+    "name": "Pipeline A",
+    "description": "Data pipeline for Device A",
+    "deviceId": 1 
+  },
+  {
+    "id": 2,
+    "name": "Pipeline B",
+    "description": "Data pipeline for Device B",
+    "deviceId": 2 
+  }
+]

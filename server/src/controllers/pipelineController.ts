@@ -1,10 +1,22 @@
 import { Request, Response } from 'express';
-import { createPipeline, getPipelines, getPipelineById, updatePipeline, deletePipeline } from '../services/pipelineService';
+import { 
+  createPipeline, 
+  getPipelines, 
+  getPipelineById, 
+  updatePipeline, 
+  deletePipeline 
+} from '../services/pipelineService';
 
 export const createPipelineHandler = async (req: Request, res: Response) => {
   try {
-    const { name, description } = req.body;
-    const pipeline = await createPipeline(name, description);
+    const { name, description, deviceId } = req.body;
+    
+    // Check if deviceId is provided
+    if (!deviceId) {
+      return res.status(400).json({ message: 'Device ID is required to create a pipeline' });
+    }
+
+    const pipeline = await createPipeline(name, description, deviceId);
     res.status(201).json(pipeline);
   } catch (error) {
     res.status(500).json({ error: error });
@@ -37,8 +49,14 @@ export const getPipelineByIdHandler = async (req: Request, res: Response) => {
 export const updatePipelineHandler = async (req: Request, res: Response) => {
   try {
     const id = parseInt(req.params.id);
-    const { name, description } = req.body;
-    const pipeline = await updatePipeline(id, name, description);
+    const { name, description, deviceId } = req.body;
+
+    // Check if deviceId is provided when updating
+    if (!deviceId) {
+      return res.status(400).json({ message: 'Device ID is required to update the pipeline' });
+    }
+
+    const pipeline = await updatePipeline(id, name, description, deviceId);
     if (pipeline) {
       res.status(200).json(pipeline);
     } else {

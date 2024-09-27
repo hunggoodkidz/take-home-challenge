@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', deviceController.getDevices);
 router.get('/:id', deviceController.getDeviceById);
-router.post('/', deviceController.createDevice);
+router.post('/', deviceController.createDeviceWithPipeline);
 router.put('/:id', deviceController.updateDevice);
 router.delete('/:id', deviceController.deleteDevice);
 

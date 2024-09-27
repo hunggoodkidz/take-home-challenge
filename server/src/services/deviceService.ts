@@ -34,3 +34,22 @@ export const deleteDevice = async (id: number) => {
       where: { id },
     });
   };
+
+  // Create a new device and automatically create a linked pipeline
+export const createDeviceWithPipeline = async (deviceData: { name: string; status: boolean }) => {
+  return await prisma.device.create({
+    data: {
+      name: deviceData.name,
+      status: deviceData.status,
+      pipelines: {
+        create: {
+          name: `${deviceData.name} Pipeline`, // Auto-generate pipeline name
+          description: `Pipeline for ${deviceData.name}`,
+        },
+      },
+    },
+    include: {
+      pipelines: true, // Include the pipeline in the response
+    },
+  });
+};

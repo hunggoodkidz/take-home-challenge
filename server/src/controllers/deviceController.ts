@@ -62,3 +62,13 @@ export const deleteDevice = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error deleting device' });
   }
 };
+
+export const createDeviceWithPipeline = async (req: Request, res: Response) => {
+  try {
+    const { name, status } = req.body;
+    const device = await deviceService.createDeviceWithPipeline({ name, status });
+    res.status(201).json(device);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating device with pipeline' });
+  }
+};
