@@ -1,37 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import TimeSeriesChart from '../components/Chart';
-import { getDataPoints } from '../services/dataPointService';
-
-interface DataPoint {
-  value: number;
-  timestamp: string;
-}
+import { Line } from 'react-chartjs-2';
+import socket from '../services/socket'; // Import socket instance
+import 'chart.js/auto'; // Automatically import Chart.js
 
 const Dashboard: React.FC = () => {
-  const [deviceData, setDeviceData] = useState<{ [deviceName: string]: DataPoint[] }>({});
+  const [dataPoints, setDataPoints] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getDataPoints();
-        console.log(data); // Verify that data is in the expected format
-        setDeviceData(data);  // Update state with fetched data points
-      } catch (error) {
-        console.error('Error fetching data points:', error);
-      }
-    };
+    // Listen for real-time data points from the server
+    socket.on('device-data', (newDataPoints) => {
+      setDataPoints(newDataPoints);
+    });
 
-    fetchData();
+    // Cleanup listener on component unmount
+    return () => {
+      socket.off('device-data');
+    };
   }, []);
+
+  const chartData = {
+    labels: dataPoints.map((dp) => new Date(dp.timestamp).toLocaleTimeString()), // Convert timestamp to time
+    datasets: [
+      {
+        label: 'Device Data',
+        data: dataPoints.map((dp) => dp.value),
+        borderColor: 'rgba(75, 192, 192, 1)',
+        fill: false,
+      },
+    ],
+  };
 
   return (
     <div>
-      <h2>Time-Series Dashboard</h2>
-      <div>
-        {Object.keys(deviceData).map((deviceName) => (
-          <TimeSeriesChart key={deviceName} data={deviceData[deviceName] || []} deviceName={deviceName} />
-        ))}
-      </div>
+      <h2>Real-Time Device Data</h2>
+      <Line data={chartData} />
     </div>
   );
 };

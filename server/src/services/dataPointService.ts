@@ -46,3 +46,20 @@ export const deleteDataPoint = async (id: number) => {
     where: { id }
   });
 };
+
+// Function to get the latest data points for all devices
+export const getLatestDataPoints = async () => {
+  // Fetch the most recent data point for each device
+  const latestDataPoints = await prisma.dataPoint.findMany({
+    orderBy: {
+      timestamp: 'desc', // Get the latest data point by timestamp
+    },
+    take: 10,
+    distinct: ['deviceId'], // Ensure distinct data points by device
+    include: {
+      device: true, // Include device details in the response
+    },
+  });
+
+  return latestDataPoints;
+};

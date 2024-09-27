@@ -2,7 +2,7 @@
 import { io, Socket } from 'socket.io-client';
 
 // Replace with your WebSocket server URL
-const SOCKET_URL = 'http://localhost:4000';
+const SOCKET_URL = 'http://localhost:3000';
 
 // Create and export the socket instance
 const socket: Socket = io(SOCKET_URL, {
