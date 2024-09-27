@@ -27,6 +27,16 @@
       "x": 500,
       "y": 600
     },
+    "pipelineId": 1
+  },
+  {
+    "id": 4,
+    "name": "Node D",
+    "type": "output",
+    "position": {
+      "x": 500,
+      "y": 800
+    },
     "pipelineId": 2
   }
 ]

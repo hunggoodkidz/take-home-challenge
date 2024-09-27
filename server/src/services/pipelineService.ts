@@ -50,3 +50,15 @@ export const deletePipeline = async (id: number) => {
     where: { id },
   });
 };
+
+// Fetch pipelines by device ID
+export const getPipelinesByDeviceId = async (deviceId: number) => {
+  return await prisma.pipeline.findMany({
+    where: {
+      deviceId,
+    },
+    include: {
+      nodes: true, // Include nodes if necessary
+    },
+  });
+};

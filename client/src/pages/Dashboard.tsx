@@ -18,8 +18,8 @@ const Dashboard: React.FC = () => {
 
       {selectedDeviceId && (
         <>
-          <PipelineBuilder  />
-          <TimeSeriesChart />
+          <PipelineBuilder deviceId={selectedDeviceId} />
+          <TimeSeriesChart  />
         </>
       )}
     </div>

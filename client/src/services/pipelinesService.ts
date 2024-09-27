@@ -2,7 +2,7 @@ import apiClient from '../utils/api';
 
 export const getPipelines = async () => {
   try {
-    const response = await apiClient.get('/pipelines');
+    const response = await apiClient.get('/pipelines/all');
     return response.data;
   } catch (error) {
     console.error('Error fetching pipelines:', error);
@@ -46,6 +46,17 @@ export const deletePipeline = async (id: number) => {
     return response.data;
   } catch (error) {
     console.error('Error deleting pipeline:', error);
+    throw error;
+  }
+};
+
+// Fetch pipelines by device ID
+export const getPipelinesByDeviceId = async (deviceId: number) => {
+  try {
+    const response = await apiClient.get(`/pipelines?deviceId=${deviceId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching pipeline:', error);
     throw error;
   }
 };

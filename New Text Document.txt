@@ -45,3 +45,6 @@ model Notification {
   createdAt DateTime @default(now())                 // Timestamp for when the notification was created
   node      Node     @relation(fields: [nodeId], references: [id])  // Relationship with Node
 }
+
+
+SELECT setval(pg_get_serial_sequence('"Node"', 'id'), COALESCE(MAX("id"), 1)) FROM "Node";

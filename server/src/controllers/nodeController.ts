@@ -56,3 +56,17 @@ export const deleteNode = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error fetching devices' });
   }
 };
+
+export const getNodesByPipelineIdHandler = async (req: Request, res: Response) => {
+  try {
+    const { pipelineId } = req.query; // Get pipelineId from query params
+    if (!pipelineId) {
+      return res.status(400).json({ error: 'Pipeline ID is required' });
+    }
+
+    const nodes = await nodeService.getNodesByPipelineId(Number(pipelineId));
+    return res.status(200).json(nodes);
+  } catch (error) {
+    return res.status(500).json({ error: 'Error fetching nodes' });
+  }
+};

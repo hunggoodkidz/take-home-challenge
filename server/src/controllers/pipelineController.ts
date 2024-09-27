@@ -4,7 +4,8 @@ import {
   getPipelines, 
   getPipelineById, 
   updatePipeline, 
-  deletePipeline 
+  deletePipeline,
+  getPipelinesByDeviceId
 } from '../services/pipelineService';
 
 export const createPipelineHandler = async (req: Request, res: Response) => {
@@ -74,5 +75,20 @@ export const deletePipelineHandler = async (req: Request, res: Response) => {
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+};
+
+// Controller to get pipelines by device ID
+export const getPipelinesByDeviceIdHandler = async (req: Request, res: Response) => {
+  try {
+    const { deviceId } = req.query; // Get deviceId from query params
+    if (!deviceId) {
+      return res.status(400).json({ error: 'Device ID is required' });
+    }
+
+    const pipelines = await getPipelinesByDeviceId(Number(deviceId));
+    return res.status(200).json(pipelines);
+  } catch (error) {
+    return res.status(500).json({ error: 'Error fetching pipelines' });
   }
 };

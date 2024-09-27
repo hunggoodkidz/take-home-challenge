@@ -10,5 +10,11 @@
     "name": "Pipeline B",
     "description": "Data pipeline for Device B",
     "deviceId": 2 
+  },
+  {
+    "id": 3,
+    "name": "Pipeline C",
+    "description": "Data pipeline for Device C",
+    "deviceId": 3 
   }
 ]

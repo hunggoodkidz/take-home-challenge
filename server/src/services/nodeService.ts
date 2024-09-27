@@ -33,3 +33,11 @@ export const deleteNode = async (id: number) => {
     where: { id },
   });
 };
+
+export const getNodesByPipelineId = async (pipelineId: number) => {
+  return prisma.node.findMany({
+    where: {
+      pipelineId: pipelineId, // Ensure only nodes with the specific pipelineId are returned
+    },
+  });
+};

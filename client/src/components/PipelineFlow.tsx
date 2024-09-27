@@ -16,15 +16,22 @@ import {
   type OnConnect,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { getNodes, createNode, updateNode, deleteNode } from '../services/nodeService';
+import { getNodesByPipelineId, createNode, updateNode, deleteNode } from '../services/nodeService';
 import { getLinks, createLink, deleteLink } from '../services/linkService';
+import { getPipelinesByDeviceId } from '../services/pipelinesService'; // Import for getting pipelines by device ID
 
-const PipelineFlow: React.FC = () => {
+type PipelineFlowProps = {
+  deviceId: number | null; // Accept deviceId as prop
+};
+
+const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
+  const [pipelineId, setPipelineId] = useState<number | null>(null); // Store the pipeline ID
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [nodeLabel, setNodeLabel] = useState<string>('');
   const [nodeType, setNodeType] = useState<string>('default'); // New state for node type selection
+
 
   // Map database nodes to React-flow format
   const mapDBNodesToFlow = (nodeData: any[]): Node[] =>
@@ -43,20 +50,44 @@ const PipelineFlow: React.FC = () => {
       target: link.targetNodeId.toString(),
     }));
 
-  // Fetch nodes and edges from the API when component loads
+
+  // Fetch pipeline ID by selected device ID
+  useEffect(() => {
+    async function fetchPipeline() {
+      if (deviceId) {
+        try {
+          const pipelines = await getPipelinesByDeviceId(deviceId);
+          if (pipelines && pipelines.length > 0) {
+            setPipelineId(pipelines[0].id); // Assuming one pipeline per device
+          } else {
+            console.error('No pipelines found for this device.');
+          }
+        } catch (error) {
+          console.error('Error fetching pipeline:', error);
+        }
+      }
+    }
+    fetchPipeline();
+  }, [deviceId]);
+
+  // Fetch nodes and edges based on the selected pipelineId
   useEffect(() => {
     async function fetchData() {
-      try {
-        const nodeData = await getNodes();
-        const edgeData = await getLinks();
-        setNodes(mapDBNodesToFlow(nodeData));
-        setEdges(mapDBLinksToFlow(edgeData));
-      } catch (error) {
-        console.error('Error loading nodes or links:', error);
+      if (pipelineId) {
+        try {
+          const nodeData = await getNodesByPipelineId(pipelineId);
+          const edgeData = await getLinks();
+          setNodes(mapDBNodesToFlow(nodeData));
+          setEdges(mapDBLinksToFlow(edgeData));
+        } catch (error) {
+          console.error('Error loading nodes or links:', error);
+        }
       }
     }
     fetchData();
-  }, []);
+  }, [pipelineId]);
+
+
 
   // Handle node changes (dragging and updating positions)
   const onNodesChange = useCallback(
@@ -112,37 +143,40 @@ const PipelineFlow: React.FC = () => {
   // Function to add a new node
   const addNode = async () => {
     try {
+      if (!pipelineId) {
+        console.error('No pipeline selected.');
+        return;
+      }
+
       // Generate a base node name
       const baseName = `Node ${nodes.length + 1}`;
-  
+
       // Check if a node with the same name already exists
       const existingNode = nodes.find((node) => node.data.label === baseName);
-  
+
       // If the base name already exists, generate a new unique name
       let uniqueName = baseName;
       if (existingNode) {
-        // Append a unique suffix to the name (e.g., timestamp or a unique number)
-        const timestamp = new Date().getTime(); // You can also use a UUID or other unique identifiers
+        // Append a unique suffix to the name
+        const timestamp = new Date().getTime();
         uniqueName = `${baseName}-${timestamp}`;
       }
-  
+
       // Create the new node with the unique name
       const newNode = {
-        name: uniqueName,                // Use the unique node name
-        type: nodeType,                  // Use selected node type
-        position: { x: Math.random() * 400, y: Math.random() * 400 }, // Random position
-        pipelineId: 1,                   // Assuming pipeline ID 1 for now (adjust as needed)
+        name: uniqueName,
+        type: nodeType,
+        position: { x: Math.random() * 400, y: Math.random() * 400 },
+        pipelineId: pipelineId, // Link to the selected pipelineId
       };
-  
-      // Pass the entire nodeData object to the createNode function
+
       const savedNode = await createNode(newNode);
-  
-      // Add the newly created node to the local state
+
       setNodes((nds) => [
         ...nds,
         { id: savedNode.id.toString(), data: { label: savedNode.name }, position: savedNode.position, type: savedNode.type }
       ]);
-  
+
     } catch (error) {
       console.error('Error creating node:', error);
     }
