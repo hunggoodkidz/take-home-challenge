@@ -9,4 +9,10 @@ router.post('/', deviceController.createDeviceWithPipeline);
 router.put('/:id', deviceController.updateDevice);
 router.delete('/:id', deviceController.deleteDevice);
 
+// Route to get devices with node counts
+router.get('/with-node-count', deviceController.getDevicesWithNodeCountHandler);
+
+// Route to get devices with data point counts
+router.get('/with-data-point-count', deviceController.getDevicesWithDataPointCountHandler);
+
 export default router;

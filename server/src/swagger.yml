@@ -1,213 +1,319 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: Web Application System API
-  description: API documentation for the Data Pipeline application, including endpoints for Devices, Nodes, and Data Points.
+  title: API Documentation
   version: 1.0.0
+  description: API documentation for Devices, Nodes, Pipelines, Links, DataPoints, and Notifications
 servers:
-  - url: http://localhost:3000
-    description: Local server
+  - url: 'http://localhost:3000'
 
 paths:
   /api/devices:
     get:
       summary: Retrieve all devices
+      tags:
+        - Devices
       responses:
         '200':
-          description: List of devices
+          description: Successfully retrieved list of devices
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeviceList'
-
+                type: array
+                items:
+                  $ref: '#/components/schemas/Device'
     post:
       summary: Create a new device
+      tags:
+        - Devices
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DeviceCreate'
+              $ref: '#/components/schemas/CreateDevice'
       responses:
         '201':
-          description: Device created
+          description: Device successfully created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Device'
 
-  /api/devices/{deviceId}:
-    parameters:
-      - name: deviceId
-        in: path
-        required: true
-        schema:
-          type: integer
-
+  /api/devices/{id}:
     get:
-      summary: Retrieve a single device by ID
+      summary: Get a device by ID
+      tags:
+        - Devices
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The device ID
       responses:
         '200':
-          description: Device details
+          description: Successfully retrieved the device
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Device'
-
-    put:
-      summary: Update an existing device
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DeviceUpdate'
-      responses:
-        '200':
-          description: Device updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Device'
+        '404':
+          description: Device not found
 
     delete:
-      summary: Delete a device
+      summary: Delete a device by ID
+      tags:
+        - Devices
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The device ID
       responses:
         '204':
-          description: Device deleted
+          description: Device successfully deleted
 
   /api/nodes:
     get:
       summary: Retrieve all nodes
+      tags:
+        - Nodes
       responses:
         '200':
-          description: List of nodes
+          description: Successfully retrieved list of nodes
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodeList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Node'
 
     post:
       summary: Create a new node
+      tags:
+        - Nodes
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NodeCreate'
+              $ref: '#/components/schemas/CreateNode'
       responses:
         '201':
-          description: Node created
+          description: Node successfully created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Node'
 
-  /api/nodes/{nodeId}:
-    parameters:
-      - name: nodeId
-        in: path
-        required: true
-        schema:
-          type: integer
-
+  /api/nodes/{id}:
     get:
-      summary: Retrieve a single node by ID
+      summary: Get a node by ID
+      tags:
+        - Nodes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The node ID
       responses:
         '200':
-          description: Node details
+          description: Successfully retrieved the node
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Node'
+        '404':
+          description: Node not found
 
-    put:
-      summary: Update an existing node
+    delete:
+      summary: Delete a node by ID
+      tags:
+        - Nodes
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The node ID
+      responses:
+        '204':
+          description: Node successfully deleted
+
+  /api/pipelines:
+    get:
+      summary: Retrieve all pipelines
+      tags:
+        - Pipelines
+      responses:
+        '200':
+          description: Successfully retrieved list of pipelines
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pipeline'
+
+    post:
+      summary: Create a new pipeline
+      tags:
+        - Pipelines
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NodeUpdate'
+              $ref: '#/components/schemas/CreatePipeline'
       responses:
-        '200':
-          description: Node updated
+        '201':
+          description: Pipeline successfully created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Node'
+                $ref: '#/components/schemas/Pipeline'
+
+  /api/pipelines/{id}:
+    get:
+      summary: Get a pipeline by ID
+      tags:
+        - Pipelines
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The pipeline ID
+      responses:
+        '200':
+          description: Successfully retrieved the pipeline
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pipeline'
+        '404':
+          description: Pipeline not found
 
     delete:
-      summary: Delete a node
+      summary: Delete a pipeline by ID
+      tags:
+        - Pipelines
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: The pipeline ID
       responses:
         '204':
-          description: Node deleted
+          description: Pipeline successfully deleted
 
-  /api/data-points:
+  /api/links:
     get:
-      summary: Retrieve all data points
+      summary: Retrieve all links
+      tags:
+        - Links
       responses:
         '200':
-          description: List of data points
+          description: Successfully retrieved list of links
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataPointList'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Link'
+
+    post:
+      summary: Create a new link
+      tags:
+        - Links
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLink'
+      responses:
+        '201':
+          description: Link successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+
+  /api/datapoints:
+    get:
+      summary: Retrieve all data points
+      tags:
+        - DataPoints
+      responses:
+        '200':
+          description: Successfully retrieved list of data points
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataPoint'
 
     post:
       summary: Create a new data point
+      tags:
+        - DataPoints
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DataPointCreate'
+              $ref: '#/components/schemas/CreateDataPoint'
       responses:
         '201':
-          description: Data point created
+          description: Data point successfully created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataPoint'
 
-  /api/data-points/{dataPointId}:
-    parameters:
-      - name: dataPointId
-        in: path
-        required: true
-        schema:
-          type: integer
-
+  /api/notifications:
     get:
-      summary: Retrieve a single data point by ID
+      summary: Retrieve all notifications
+      tags:
+        - Notifications
       responses:
         '200':
-          description: Data point details
+          description: Successfully retrieved list of notifications
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataPoint'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
 
-    put:
-      summary: Update an existing data point
+    post:
+      summary: Create a new notification
+      tags:
+        - Notifications
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DataPointUpdate'
+              $ref: '#/components/schemas/CreateNotification'
       responses:
-        '200':
-          description: Data point updated
+        '201':
+          description: Notification successfully created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DataPoint'
-
-    delete:
-      summary: Delete a data point
-      responses:
-        '204':
-          description: Data point deleted
+                $ref: '#/components/schemas/Notification'
 
 components:
   schemas:
@@ -220,33 +326,24 @@ components:
           type: string
         status:
           type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+          description: Device status (online/offline)
+      example:
+        id: 1
+        name: Device A
+        status: true
 
-    DeviceCreate:
+    CreateDevice:
       type: object
       properties:
         name:
           type: string
+          description: Device name
         status:
           type: boolean
-
-    DeviceUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-        status:
-          type: boolean
-
-    DeviceList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Device'
+          description: Initial status of the device
+      example:
+        name: New Device
+        status: true
 
     Node:
       type: object
@@ -257,43 +354,109 @@ components:
           type: string
         type:
           type: string
+          description: Node type (input/output/default)
         position:
           type: object
+          properties:
+            x:
+              type: number
+            y:
+              type: number
         pipelineId:
+          type: integer
+      example:
+        id: 1
+        name: Node A
+        type: input
+        position:
+          x: 100
+          y: 200
+        pipelineId: 1
+
+    CreateNode:
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          description: Type of the node (input/output/default)
+        position:
+          type: object
+          properties:
+            x:
+              type: number
+            y:
+              type: number
+        pipelineId:
+          type: integer
+      example:
+        name: New Node
+        type: default
+        position:
+          x: 100
+          y: 200
+        pipelineId: 1
+
+    Pipeline:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        deviceId:
+          type: integer
+      example:
+        id: 1
+        name: Pipeline 1
+        description: Example pipeline
+        deviceId: 1
+
+    CreatePipeline:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        deviceId:
+          type: integer
+      example:
+        name: New Pipeline
+        description: Description of new pipeline
+        deviceId: 1
+
+    Link:
+      type: object
+      properties:
+        id:
+          type: integer
+        sourceNodeId:
+          type: integer
+        targetNodeId:
           type: integer
         createdAt:
           type: string
           format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+      example:
+        id: 1
+        sourceNodeId: 1
+        targetNodeId: 2
+        createdAt: '2024-09-25T10:00:00Z'
 
-    NodeCreate:
+    CreateLink:
       type: object
       properties:
-        name:
-          type: string
-        type:
-          type: string
-        position:
-          type: object
-        pipelineId:
+        sourceNodeId:
           type: integer
-
-    NodeUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-        type:
-          type: string
-        position:
-          type: object
-
-    NodeList:
-      type: array
-      items:
-        $ref: '#/components/schemas/Node'
+        targetNodeId:
+          type: integer
+      example:
+        sourceNodeId: 1
+        targetNodeId: 2
 
     DataPoint:
       type: object
@@ -302,50 +465,59 @@ components:
           type: integer
         value:
           type: number
-          format: float
         timestamp:
           type: string
           format: date-time
         nodeId:
           type: integer
         deviceId:
+          type: integer
+      example:
+        id: 1
+        value: 57.5
+        timestamp: '2024-09-25T12:00:00Z'
+        nodeId: 1
+        deviceId: 1
+
+    CreateDataPoint:
+      type: object
+      properties:
+        value:
+          type: number
+        nodeId:
+          type: integer
+        deviceId:
+          type: integer
+      example:
+        value: 57.5
+        nodeId: 1
+        deviceId: 1
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+        message:
+          type: string
+        nodeId:
           type: integer
         createdAt:
           type: string
           format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+      example:
+        id: 1
+        message: 'Node A is down'
+        nodeId: 1
+        createdAt: '2024-09-25T12:00:00Z'
 
-    DataPointCreate:
+    CreateNotification:
       type: object
       properties:
-        value:
-          type: number
-          format: float
-        timestamp:
+        message:
           type: string
-          format: date-time
         nodeId:
           type: integer
-        deviceId:
-          type: integer
-
-    DataPointUpdate:
-      type: object
-      properties:
-        value:
-          type: number
-          format: float
-        timestamp:
-          type: string
-          format: date-time
-        nodeId:
-          type: integer
-        deviceId:
-          type: integer
-
-    DataPointList:
-      type: array
-      items:
-        $ref: '#/components/schemas/DataPoint'
+      example:
+        message: 'Node A is down'
+        nodeId: 1

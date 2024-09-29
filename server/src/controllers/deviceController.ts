@@ -72,3 +72,23 @@ export const createDeviceWithPipeline = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error creating device with pipeline' });
   }
 };
+
+// Controller for getting devices with node counts
+export const getDevicesWithNodeCountHandler = async (req: Request, res: Response) => {
+  try {
+    const devices = await deviceService.getDevicesWithNodeCount();
+    res.status(200).json(devices);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching devices with node count' });
+  }
+};
+
+// Controller for getting devices with data point counts
+export const getDevicesWithDataPointCountHandler = async (req: Request, res: Response) => {
+  try {
+    const devices = await deviceService.getDevicesWithDataPointCount();
+    res.status(200).json(devices);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching devices with data point count' });
+  }
+};

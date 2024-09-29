@@ -43,3 +43,26 @@ export const deleteDevice = async (deviceId: number) => {
     throw error;
   }
 };
+
+
+// Fetch devices with node count
+export const getDevicesWithNodeCount = async () => {
+  try {
+    const response = await apiClient.get('/devices/with-node-count');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching devices with node count:', error);
+    throw error;
+  }
+};
+
+// Fetch devices with data point count
+export const getDevicesWithDataPointCount = async () => {
+  try {
+    const response = await apiClient.get('/devices/with-data-point-count');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching devices with data point count:', error);
+    throw error;
+  }
+};

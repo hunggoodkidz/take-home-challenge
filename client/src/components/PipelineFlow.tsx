@@ -69,7 +69,7 @@ const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
     }
     fetchPipeline();
   }, [deviceId]);
-
+  
   // Fetch nodes and edges based on the selected pipelineId
   useEffect(() => {
     async function fetchData() {
@@ -143,40 +143,37 @@ const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
   // Function to add a new node
   const addNode = async () => {
     try {
-      if (!pipelineId) {
-        console.error('No pipeline selected.');
-        return;
-      }
-
       // Generate a base node name
       const baseName = `Node ${nodes.length + 1}`;
-
+  
       // Check if a node with the same name already exists
       const existingNode = nodes.find((node) => node.data.label === baseName);
-
+  
       // If the base name already exists, generate a new unique name
       let uniqueName = baseName;
       if (existingNode) {
-        // Append a unique suffix to the name
-        const timestamp = new Date().getTime();
+        // Append a unique suffix to the name (e.g., timestamp or a unique number)
+        const timestamp = new Date().getTime(); // You can also use a UUID or other unique identifiers
         uniqueName = `${baseName}-${timestamp}`;
       }
-
+  
       // Create the new node with the unique name
       const newNode = {
-        name: uniqueName,
-        type: nodeType,
-        position: { x: Math.random() * 400, y: Math.random() * 400 },
-        pipelineId: pipelineId, // Link to the selected pipelineId
+        name: uniqueName,                // Use the unique node name
+        type: nodeType,                  // Use selected node type
+        position: { x: Math.random() * 400, y: Math.random() * 400 }, // Random position
+        pipelineId: 1,                   // Assuming pipeline ID 1 for now (adjust as needed)
       };
-
+  
+      // Pass the entire nodeData object to the createNode function
       const savedNode = await createNode(newNode);
-
+  
+      // Add the newly created node to the local state
       setNodes((nds) => [
         ...nds,
         { id: savedNode.id.toString(), data: { label: savedNode.name }, position: savedNode.position, type: savedNode.type }
       ]);
-
+  
     } catch (error) {
       console.error('Error creating node:', error);
     }
@@ -247,10 +244,10 @@ const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
   };
 
   return (
-    <div className="w-full h-full" style={{ height: '100vh' }}>
+    <div className="w-full h-full">
       {/* Node Type Selection */}
-      <div className="mb-4">
-        <label className="mr-4">Choose Node Type:</label>
+      <div className="mb-4 flex items-center space-x-4">
+        <span className="text-lg font-semibold">Choose Node Type:</span>
         <label>
           <input
             type="radio"
@@ -259,9 +256,9 @@ const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
             onChange={() => setNodeType('default')}
             className="mr-1"
           />
-          Default
+          <span className="px-2 py-1 border rounded cursor-pointer bg-gray-200">Default</span>
         </label>
-        <label className="ml-4">
+        <label>
           <input
             type="radio"
             value="input"
@@ -269,9 +266,9 @@ const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
             onChange={() => setNodeType('input')}
             className="mr-1"
           />
-          Input
+          <span className="px-2 py-1 border rounded cursor-pointer bg-gray-200">Input</span>
         </label>
-        <label className="ml-4">
+        <label>
           <input
             type="radio"
             value="output"
@@ -279,53 +276,58 @@ const PipelineFlow: React.FC<PipelineFlowProps> = ({ deviceId }) => {
             onChange={() => setNodeType('output')}
             className="mr-1"
           />
-          Output
+          <span className="px-2 py-1 border rounded cursor-pointer bg-gray-200">Output</span>
         </label>
       </div>
 
       <button
         onClick={addNode}
-        className="mb-4 p-2 bg-blue-500 text-white rounded"
+        className="mb-4 p-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
       >
         Add Node
       </button>
 
       {selectedNodeId && (
-        <div className="absolute top-0 right-0 p-4 bg-white border border-gray-300 shadow-lg">
+        <div className="fixed top-1/4 right-10 bg-white p-6 border border-gray-300 shadow-lg rounded-md z-10">
           <input
             type="text"
             value={nodeLabel}
             onChange={handleLabelChange}
-            className="p-2 border border-gray-300 rounded"
+            className="p-2 border border-gray-300 rounded mb-2 w-full"
           />
-          <button
-            onClick={handleLabelUpdate}
-            className="ml-2 p-2 bg-blue-500 text-white rounded"
-          >
-            Update
-          </button>
-          <button
-            onClick={handleDeleteNode}
-            className="ml-2 p-2 bg-red-500 text-white rounded"
-          >
-            Delete
-          </button>
+          <div className="flex justify-end space-x-2">
+            <button
+              onClick={handleLabelUpdate}
+              className="p-2 bg-blue-500 text-white rounded hover:bg-blue-700 transition"
+            >
+              Update
+            </button>
+            <button
+              onClick={handleDeleteNode}
+              className="p-2 bg-red-500 text-white rounded hover:bg-red-700 transition"
+            >
+              Delete
+            </button>
+          </div>
         </div>
       )}
 
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        fitView
-        onNodeClick={onNodeClick} // Add node click handler
-      >
-        <MiniMap />
-        <Controls />
-        <Background variant={BackgroundVariant.Lines} />
-      </ReactFlow>
+      <div className="border-2 border-gray-300 rounded-lg overflow-hidden">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect}
+          fitView
+          onNodeClick={onNodeClick}
+          style={{ minHeight: '70vh', width: '100%' }}
+        >
+          <MiniMap className="border-2 border-gray-300 rounded" />
+          <Controls />
+          <Background variant={BackgroundVariant.Lines} />
+        </ReactFlow>
+      </div>
     </div>
   );
 };

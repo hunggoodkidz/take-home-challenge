@@ -3,10 +3,13 @@ import Sidebar from '../components/Sidebar';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-50">
+      {/* Sidebar with more modern styling */}
       <Sidebar />
-      <div className="flex-1 flex flex-col overflow-auto">
-        <main className="flex-1 p-6 bg-white shadow-md rounded-lg mx-6 my-4">
+
+      {/* Main content area */}
+      <div className="flex-1 flex flex-col overflow-auto bg-gray-100">
+        <main className="flex-1 p-6 bg-white shadow-lg rounded-lg mx-8 my-6">
           {children}
         </main>
       </div>

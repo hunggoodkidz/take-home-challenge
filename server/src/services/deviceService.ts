@@ -53,3 +53,39 @@ export const createDeviceWithPipeline = async (deviceData: { name: string; statu
     },
   });
 };
+
+// Fetch devices with node count
+export const getDevicesWithNodeCount = async () => {
+  return await prisma.device.findMany({
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      pipelines: {
+        select: {
+          _count: {
+            select: {
+              nodes: true, // Count nodes for each pipeline linked to this device
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+// Fetch devices with data point count
+export const getDevicesWithDataPointCount = async () => {
+  return await prisma.device.findMany({
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      _count: {
+        select: {
+          dataPoints: true, // Count data points related to the device
+        },
+      },
+    },
+  });
+};

@@ -9,24 +9,31 @@ interface Device {
 
 interface DeviceSelectionProps {
   onSelectDevice: (deviceId: number) => void;
+  refreshDevices: boolean; // Add this prop to trigger a refresh
 }
 
-const DeviceSelection: React.FC<DeviceSelectionProps> = ({ onSelectDevice }) => {
+const DeviceSelection: React.FC<DeviceSelectionProps> = ({ onSelectDevice, refreshDevices }) => {
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedDevice, setSelectedDevice] = useState<number | null>(null);
 
-  useEffect(() => {
-    const fetchDevices = async () => {
-      try {
-        const data = await getDevices();
-        setDevices(data);
-      } catch (error) {
-        console.error('Error fetching devices:', error);
-      }
-    };
+  const fetchDevices = async () => {
+    try {
+      const data = await getDevices();
+      setDevices(data);
+    } catch (error) {
+      console.error('Error fetching devices:', error);
+    }
+  };
 
-    fetchDevices();
+  useEffect(() => {
+    fetchDevices(); // Fetch devices when the component mounts
   }, []);
+
+  useEffect(() => {
+    if (refreshDevices) {
+      fetchDevices(); // Fetch devices again when `refreshDevices` changes
+    }
+  }, [refreshDevices]);
 
   const handleDeviceChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const deviceId = Number(event.target.value);
