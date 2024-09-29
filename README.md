@@ -5,7 +5,7 @@ Doing full-stack assignment:
 
 Back-end: NodeJS with Express, Typescript, PostgreSQL, Prisma ORM, Swagger (Api Documentation)
 
-Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO, Redux
+Front-end: React, Typescript, React-Flow , TailwindCSS, Chart.JS, Axios, Socket.IO, Redux, React Toastify
 
 ## Requirements
 
@@ -43,13 +43,18 @@ Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO
 - **Real-time Notifications**: Receive alerts and notifications for device and node statuses in real time.
 - **Data Visualization**: View time-series data on the dashboard using graphs and charts.
 
-## Diagram 
+## Diagram & Mockup
 
 <p>
 <img src="images/data_modelling.png"/> 
 </p>
 
+<p>
+<img src="images/mock-up.png"/> 
+</p>
+
 ## API Endpoints
+
 
 ### Devices
 
@@ -80,6 +85,20 @@ Front-end: React, Typescript, React-Flow , TailwindCSS, CharJS, Axios, Socket.IO
 
 - `GET /api/notifications`: Retrieve all notifications.
 - `POST /api/notifications`: Create a new notification for a node.
+
+### What’s Next To Do / Improve
+
+-  Need to improve feature (Device Online/Offline,Device Status, Notification, Websocket, Streaming Data,Monitor Logging,..)
+
+- Authentication & Authorization (JWT) 
+
+- Front-end UI Enhancement (maybe using Material UI, Ant Design,..)
+
+- Write Testing (Jest,Mocha) and handling Error
+
+- Deployment and CI/CD
+
+- Performance Optimization: Optimize real-time performance, especially as the number of devices and data points grows. Use a message queue like Redis or RabbitMQ,Kafka for better scaling in real-time updates.
 
 ### Notes
 
